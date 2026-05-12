@@ -91,10 +91,11 @@ body::before {
   z-index:1000;padding:20px;
   animation:fadeIn .4s ease;
   transition: background .35s ease;
+  overflow-y: auto;
 }
 #welcome-overlay.hide{animation:fadeOut .35s ease forwards;pointer-events:none}
-
 .wcard {
+  margin: auto; /* helps with flex alignment when scrolling */
   background:var(--bg2);
   border:1px solid var(--border);
   border-radius:24px;
@@ -148,6 +149,13 @@ body::before {
   background:var(--bg2);border:none;border-bottom:1px solid var(--border);
   color:var(--text);font-size:14px;font-family:'Inter',sans-serif;outline:none;
 }
+#cbox-options {
+  max-height: 180px;
+  overflow-y: auto;
+}
+#cbox-options::-webkit-scrollbar { width: 6px; }
+#cbox-options::-webkit-scrollbar-track { background: transparent; }
+#cbox-options::-webkit-scrollbar-thumb { background: rgba(124,58,237,.25); border-radius: 4px; }
 .cbox-option{
   padding:12px 16px;cursor:pointer;font-size:14px;
   transition:all .15s;display:flex;align-items:center;gap:10px;

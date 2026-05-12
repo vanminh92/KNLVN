@@ -1,0 +1,209 @@
+/* ══ ROLE SELECTION GRID ══ */
+.role-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.role-card {
+  background: var(--bg3);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 22px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s cubic-bezier(.34,1.56,.64,1);
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+}
+
+.role-card:hover {
+  border-color: var(--primary);
+  background: rgba(124,58,237,.15);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(124,58,237,.35);
+}
+
+.role-card:active { transform: translateY(0); }
+
+.role-icon { font-size: 36px; }
+
+.role-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.role-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* BTN BACK */
+.btn-back {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+  display: block;
+  transition: color .2s;
+}
+.btn-back:hover { color: var(--primary-light); }
+
+/* ADMIN PWD FIELD */
+.admin-pwd-field {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--bg3);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  color: var(--text);
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border .2s;
+}
+.admin-pwd-field:focus { border-color: var(--primary); background: rgba(124,58,237,.08); }
+.admin-pwd-field.shake { animation: shake .4s ease; border-color: var(--danger); }
+
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%,60%{transform:translateX(-6px)}
+  40%,80%{transform:translateX(6px)}
+}
+
+.pwd-error {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #fca5a5;
+  font-weight: 600;
+}
+
+/* LOGOUT BTN */
+.btn-logout {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: color .2s;
+  padding: 0;
+}
+.btn-logout:hover { color: var(--danger); }
+
+/* THANK YOU SCREEN */
+.thankyou-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  animation: fadeIn .6s ease;
+}
+
+.ty-icon {
+  font-size: 80px;
+  margin-bottom: 16px;
+  animation: tyBounce 1s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes tyBounce {
+  0% { transform: scale(0) rotate(-20deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.ty-title {
+  font-size: 26px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary-light), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+}
+
+.ty-sub {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+
+.ty-voted-card {
+  background: var(--card);
+  border: 1.5px solid var(--primary);
+  border-radius: 16px;
+  padding: 20px 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 0 0 3px rgba(124,58,237,.2);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.ty-note {
+  color: var(--text-muted);
+  font-size: 13px;
+  max-width: 360px;
+  line-height: 1.6;
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 12px 18px;
+}
+
+/* ══ THEME TOGGLE BUTTON ══ */
+.theme-toggle {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  flex-shrink: 0;
+}
+.theme-toggle input {
+  opacity: 0; width: 0; height: 0; position: absolute;
+}
+.theme-track {
+  position: absolute; inset: 0; border-radius: 14px;
+  background: var(--bg3); border: 1.5px solid var(--border);
+  cursor: pointer; transition: background .3s ease, border-color .3s ease;
+  display: flex; align-items: center; padding: 0 4px;
+}
+.theme-track::after {
+  content: ''; width: 20px; height: 20px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1); flex-shrink: 0;
+}
+.theme-toggle input:checked + .theme-track {
+  background: #e0d9ff; border-color: rgba(124,58,237,.3);
+}
+.theme-toggle input:checked + .theme-track::after {
+  transform: translateX(24px);
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+}
+.theme-toggle-wrap {
+  display: flex; align-items: center; gap: 8px; margin-left: 4px;
+}
+
+/* Welcome floating theme btn */
+.welcome-theme-btn {
+  position: fixed; top: 16px; right: 16px; z-index: 1001;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 50px; padding: 7px 14px;
+  display: flex; align-items: center; gap: 7px;
+  font-size: 13px; color: var(--text-muted);
+  cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 600;
+  transition: all .2s; box-shadow: var(--shadow);
+}
+.welcome-theme-btn:hover { border-color: var(--primary); color: var(--primary-light); }
+.welcome-theme-btn .wt-icon { font-size: 16px; transition: transform .4s ease; }
+[data-theme="light"] .welcome-theme-btn .wt-icon { transform: rotate(180deg); }
+.welcome-theme-btn .wt-label { font-size: 12px; }

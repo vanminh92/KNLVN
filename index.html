@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🗳️ Bình Chọn Nhóm | KTLVN</title>
+  <meta name="description" content="Hệ thống bình chọn nhóm xuất sắc nhất - công bằng, minh bạch"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="extra.css"/>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     WELCOME OVERLAY — Chọn vai trò
+══════════════════════════════════════════ -->
+<!-- Floating theme toggle (visible on welcome screen) -->
+<button class="welcome-theme-btn" id="welcome-theme-btn" onclick="toggleTheme()" aria-label="Chuyển chế độ sáng/tối">
+  <span class="wt-icon">🌙</span>
+  <span class="wt-label" id="welcome-theme-label">Chế độ sáng</span>
+</button>
+
+<div id="welcome-overlay" role="dialog" aria-modal="true" aria-label="Chào mừng">
+
+  <!-- STEP 1: Chọn vai trò -->
+  <div class="wcard" id="step-role">
+    <div class="wlogo">🗳️</div>
+    <h1 class="wtitle">Bình Chọn Nhóm</h1>
+    <p class="wsub">Chọn vai trò của bạn để tiếp tục</p>
+
+    <div class="role-grid">
+      <button class="role-card" id="role-member" onclick="selectRole('member')">
+        <span class="role-icon">👥</span>
+        <span class="role-name">Thành viên nhóm</span>
+        <span class="role-desc">Tham gia bình chọn cho nhóm xuất sắc</span>
+      </button>
+      <button class="role-card" id="role-admin" onclick="selectRole('admin')">
+        <span class="role-icon">🔧</span>
+        <span class="role-name">Quản trị viên</span>
+        <span class="role-desc">Xem kết quả & quản lý dữ liệu</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 2A: Chọn nhóm (cho thành viên) -->
+  <div class="wcard hidden" id="step-group">
+    <button class="btn-back" onclick="goBack()">← Quay lại</button>
+    <div class="wlogo">👥</div>
+    <h2 class="wtitle">Chọn nhóm của bạn</h2>
+    <p class="wsub">Chọn đúng nhóm để không bị tính vào phần bình chọn của nhóm mình</p>
+
+    <label class="flabel" for="group-combobox">Nhóm của bạn</label>
+    <div class="cbox" id="cbox-wrapper">
+      <button type="button" class="cbox-display" id="group-combobox"
+              aria-haspopup="listbox" aria-expanded="false">
+        <span class="placeholder" id="cbox-display-text">-- Chọn nhóm của bạn --</span>
+      </button>
+      <span class="cbox-arrow" id="cbox-arrow">▼</span>
+      <div class="cbox-dropdown hidden" id="cbox-dropdown" role="listbox">
+        <input type="text" class="cbox-search" id="cbox-search"
+               placeholder="🔍 Tìm kiếm nhóm..." autocomplete="off"/>
+        <div id="cbox-options"></div>
+      </div>
+    </div>
+
+    <button class="btn-start" id="btn-start" disabled>
+      Bắt đầu bình chọn →
+    </button>
+  </div>
+
+  <!-- STEP 2B: Nhập mật khẩu Admin -->
+  <div class="wcard hidden" id="step-admin">
+    <button class="btn-back" onclick="goBack()">← Quay lại</button>
+    <div class="wlogo">🔐</div>
+    <h2 class="wtitle">Đăng nhập Admin</h2>
+    <p class="wsub">Nhập mật khẩu để truy cập bảng điều khiển quản trị</p>
+
+    <label class="flabel" for="admin-pwd-input">Mật khẩu</label>
+    <div style="position:relative;margin-bottom:20px">
+      <input type="password" class="admin-pwd-field" id="admin-pwd-input"
+             placeholder="Nhập mật khẩu admin..." autocomplete="off"/>
+      <div class="pwd-error hidden" id="pwd-error">❌ Sai mật khẩu, thử lại!</div>
+    </div>
+
+    <button class="btn-start" id="btn-admin-login" onclick="loginAdmin()">
+      🔓 Đăng nhập
+    </button>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     MEMBER VIEW — Chỉ bình chọn
+══════════════════════════════════════════ -->
+<div id="member-app" class="hidden">
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="hbrand">
+        <span class="ico">🗳️</span>
+        <span>KTLVN Vote</span>
+      </div>
+      <div class="hbadge">
+        <span>👥</span>
+        <span class="gname" id="member-group-display">—</span>
+        <span style="color:var(--border)">|</span>
+        <div class="theme-toggle-wrap" title="Chuyển chế độ sáng/tối">
+          <span style="font-size:13px">☀️</span>
+          <label class="theme-toggle">
+            <input type="checkbox" id="theme-toggle-member" onchange="toggleTheme()"/>
+            <span class="theme-track"></span>
+          </label>
+          <span style="font-size:13px">🌙</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Màn hình bình chọn -->
+    <div id="member-voting">
+      <div class="sec-head" style="text-align:center;padding:16px 0 8px">
+        <h2 class="sec-title">🗳️ Chọn nhóm xuất sắc nhất</h2>
+        <p class="sec-sub">Click vào thẻ nhóm để chọn, sau đó nhấn bình chọn</p>
+      </div>
+
+      <div class="groups-grid" id="member-groups-grid"></div>
+
+      <div class="vote-action">
+        <button class="btn-vote" id="btn-member-vote" disabled>💜 Bình Chọn</button>
+        <p class="vote-hint" id="member-vote-hint">Vui lòng chọn một nhóm để tiếp tục</p>
+      </div>
+    </div>
+
+    <!-- Màn hình cảm ơn (sau khi vote) -->
+    <div id="member-thankyou" class="hidden">
+      <div class="thankyou-wrap">
+        <div class="ty-icon">🎉</div>
+        <h2 class="ty-title">Cảm ơn bạn đã bình chọn!</h2>
+        <p class="ty-sub">Phiếu bầu của bạn đã được ghi nhận thành công.</p>
+        <div class="ty-voted-card" id="ty-voted-card"></div>
+        <p class="ty-note">Kết quả sẽ được công bố bởi Ban tổ chức sau khi kết thúc phiên bình chọn.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ADMIN VIEW — Đầy đủ chức năng
+══════════════════════════════════════════ -->
+<div id="admin-app" class="hidden">
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="hbrand">
+        <span class="ico">🔧</span>
+        <span>KTLVN Admin</span>
+      </div>
+      <div class="hbadge" style="gap:8px">
+        <span style="color:var(--success)">●</span>
+        <span style="color:var(--success);font-weight:700">Đã xác thực</span>
+        <span style="color:var(--border)">|</span>
+        <button class="btn-logout" onclick="logoutAdmin()">Đăng xuất</button>
+        <span style="color:var(--border)">|</span>
+        <div class="theme-toggle-wrap" title="Chuyển chế độ sáng/tối">
+          <span style="font-size:13px">☀️</span>
+          <label class="theme-toggle">
+            <input type="checkbox" id="theme-toggle-admin" onchange="toggleTheme()"/>
+            <span class="theme-track"></span>
+          </label>
+          <span style="font-size:13px">🌙</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" id="tab-result-btn" role="tab"
+            aria-selected="true" onclick="switchAdminTab('result')">
+      📊 Kết quả
+    </button>
+    <button class="tab-btn" id="tab-manage-btn" role="tab"
+            aria-selected="false" onclick="switchAdminTab('manage')">
+      ⚙️ Quản lý
+    </button>
+  </nav>
+
+  <!-- Tab: Kết quả -->
+  <div class="tab-content active" id="admin-tab-result" role="tabpanel">
+    <div class="container">
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-val" id="stat-total">0</div>
+          <div class="stat-lbl">Tổng phiếu bầu</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="stat-groups">0</div>
+          <div class="stat-lbl">Nhóm tham gia</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="stat-leader">—</div>
+          <div class="stat-lbl">Đang dẫn đầu</div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="chart-wrap">
+        <div class="chart-head">📊 Biểu đồ bình chọn</div>
+        <div class="chart-live">
+          <span class="live-dot"></span>
+          Tự động cập nhật mỗi 3 giây
+        </div>
+        <div class="chart-inner">
+          <canvas id="vote-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="podium-wrap">
+        <div class="podium-head">🏆 Bảng xếp hạng</div>
+        <div class="podium-list" id="podium-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab: Quản lý -->
+  <div class="tab-content hidden" id="admin-tab-manage" role="tabpanel">
+    <div class="container">
+      <div class="admin-wrap">
+        <div class="admin-head">⚙️ Quản lý dữ liệu</div>
+        <p class="admin-desc">Thực hiện các thao tác quản lý phiên bình chọn tại đây.</p>
+        <div class="admin-actions">
+          <button class="btn-danger" onclick="confirmReset()">🗑️ Reset tất cả phiếu bầu</button>
+          <button class="btn-sec" onclick="exportData()">📥 Xuất dữ liệu (JSON)</button>
+        </div>
+
+        <div style="margin-top:24px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:10px;color:var(--text-muted)">
+            📋 Nhật ký bình chọn
+          </div>
+          <div id="vote-log"
+               style="background:var(--bg3);border-radius:10px;padding:16px;font-size:13px;
+                      color:var(--text-muted);max-height:280px;overflow-y:auto;line-height:2">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay hidden" id="confirm-modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <div class="modal-ico" id="modal-ico">⚠️</div>
+    <div class="modal-title" id="modal-title">Xác nhận</div>
+    <p class="modal-text" id="modal-text">Bạn có chắc không?</p>
+    <div class="modal-actions">
+      <button class="btn-sec" onclick="closeModal()">Hủy</button>
+      <button class="btn-danger" id="modal-confirm-btn">Xác nhận</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

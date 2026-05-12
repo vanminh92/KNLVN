@@ -1,0 +1,17 @@
+{
+  "name": "ktlvn",
+  "version": "1.0.0",
+  "description": "Ứng dụng web thời gian thực (real-time) cho phép các nhóm tham gia đánh giá chéo và bình chọn cho nhau. Hệ thống đảm bảo tính công bằng bằng cách chặn tự bình chọn và cung cấp góc nhìn trực quan, minh bạch thông qua biểu đồ dữ liệu — chỉ dành cho Admin. Phong cách thiết kế hướng tới sự hiện đại, tối giản, tập trung vào trải nghiệm tương tác.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
+}

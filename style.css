@@ -102,11 +102,13 @@ body::before {
   width:100%;max-width:440px;
   box-shadow:var(--shadow),var(--glow);
   animation:slideUp .5s cubic-bezier(.34,1.56,.64,1);
-  position:relative;overflow:hidden;
+  position:relative;
 }
 .wcard::before{
   content:'';position:absolute;top:0;left:0;right:0;height:3px;
   background:linear-gradient(90deg,var(--primary),var(--accent),var(--success));
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
 }
 
 .wlogo{font-size:54px;text-align:center;margin-bottom:10px;animation:bounce 2.5s ease-in-out infinite}

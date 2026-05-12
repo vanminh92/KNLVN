@@ -5,7 +5,7 @@
 
 // ── CONFIG ─────────────────────────────
 const GROUPS = [
-  { id: 'bat-hop-nhat-tam', name: 'BẮT HỢP NHẤT TÂM', emoji: '🔥' },
+  { id: 'bat-hop-nhat-tam', name: 'BÁT HỢP NHẤT TÂM', emoji: '🔥' },
   { id: 'lien-ket-tri-tue', name: 'LIÊN KẾT TRÍ TUỆ', emoji: '🧠' },
   { id: 'vuon-tam-quoc-te', name: 'VƯƠN TẦM QUỐC TẾ', emoji: '🌏' },
   { id: 'khong-tri-hoan',   name: 'KHÔNG TRÌ HOÃN',   emoji: '⚡' },
